@@ -1,0 +1,42 @@
+Create Table Students_Tbl
+(
+Id int,
+Student_Name Varchar(30)
+);
+Insert into Students_Tbl values(1,'Mark');
+Insert into Students_Tbl values(2,'David');
+Insert into Students_Tbl values(3,'John');
+Insert into Students_Tbl values(4,'Albert');
+
+Create Table Friends_Tbl(
+Id int,
+Friend_Id int
+);
+
+Insert into Friends_Tbl values(1,2);
+Insert into Friends_Tbl values(2,3);
+Insert into Friends_Tbl values(3,4);
+Insert into Friends_Tbl values(4,1);
+
+Create Table Package_Tbl
+(Id int,
+Salary Bigint );
+
+Insert into Package_Tbl values(1,18);
+Insert into Package_Tbl values(2,12);
+Insert into Package_Tbl values(3,13);
+Insert into Package_Tbl values(4,15);
+
+with CTE_student as (
+select Students_Tbl.Id,Students_Tbl.Student_Name,Friends_Tbl.Friend_Id,Package_Tbl.Salary
+from Students_Tbl join Friends_Tbl on Students_Tbl.Id = Friends_Tbl.Id
+                  join Package_Tbl on Students_Tbl.Id = Package_Tbl.Id),
+CTE_friend as (
+select st.Student_Name as student_name,st.Salary as student_salary, bf.student_name as best_friend, bf.Salary as best_friend_salary
+from CTE_student as st inner join CTE_student as bf on st.Friend_Id = bf.Id
+)
+                  
+select student_name 
+from CTE_friend
+where student_salary < best_friend_salary
+                
